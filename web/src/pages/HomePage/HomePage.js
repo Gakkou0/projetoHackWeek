@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Button } from '@mui/material'
 
 import { Link, routes } from '@redwoodjs/router'

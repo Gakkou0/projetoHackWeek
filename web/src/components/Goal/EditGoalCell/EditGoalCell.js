@@ -1,5 +1,5 @@
+/* eslint-disable prettier/prettier */
 import { navigate, routes } from '@redwoodjs/router'
-
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 

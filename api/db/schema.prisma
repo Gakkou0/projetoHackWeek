@@ -21,7 +21,7 @@ generator client {
 model User {
   id                  Int       @id @default(autoincrement())
   name                String
-  userType            Int
+  userType            Int       @default(0)
   email               String    @unique
   password            String
   meetingsAsAdvisor   Meeting[] @relation("advisor")

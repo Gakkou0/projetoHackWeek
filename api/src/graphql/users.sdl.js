@@ -2,7 +2,7 @@ export const schema = gql`
   type User {
     id: Int!
     name: String!
-    userType: Int!
+    userType: Int
     email: String!
     password: String!
     meetingsAsAdvisor: [Meeting]!
@@ -18,7 +18,7 @@ export const schema = gql`
 
   input CreateUserInput {
     name: String!
-    userType: Int!
+    userType: Int
     email: String!
     password: String!
   }

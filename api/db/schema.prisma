@@ -12,58 +12,47 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 // TODO: Please remove the following example:
 
-model Student {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String
-  password String
-  meeting  Meeting[]
-}
+// USERTYPE:
+// STUDENT = 0
+// ADVISOR = 1
+// COADVISOR = 2
+// COORDINATION = 3
 
-model Supervisor {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String
-  password String
-  meeting  Meeting[]
+model User {
+  id                  Int       @id @default(autoincrement())
+  name                String
+  userType            Int
+  email               String    @unique
+  password            String
+  meetingsAsAdvisor   Meeting[] @relation("advisor")
+  meetingsAsCoadvisor Meeting[] @relation("coadvisor")
+  meetingsAsStudent   Meeting[] @relation("student")
+  goals               Goal[]
 }
-
-// STATUS:
-// ACTIVE = 0
-// DONE = 1
-// CANCELED = 2
 
 model Meeting {
-  id           Int          @id @default(autoincrement())
-  dateTime     DateTime
-  student      Student      @relation(fields: [studentId], references: [id])
-  studentId    Int
-  supervisor   Supervisor[]
-  local        String
-  notes        String
-  toDo         String
-  status       Int          @default(0)
-  cancelMotive String?
-  approved     Boolean      @default(false)
+  id                 Int      @id @default(autoincrement())
+  datetime           DateTime
+  advisor            User     @relation("advisor", fields: [advisorId], references: [id])
+  coadvisor          User?    @relation("coadvisor", fields: [coadvisorId], references: [id])
+  student            User     @relation("student", fields: [studentId], references: [id])
+  observations       String?
+  deliverable        String?
+  cancellationReason String?
+  location           String
+  studentAgreement   Boolean  @default(false)
+  advisorAgreement   Boolean  @default(false)
+  advisorId          Int
+  coadvisorId        Int?
+  studentId          Int
 }
-
-// STATUS:
-// ACTIVE = 0
-// DONE = 1
 
 model Goal {
-  id          Int       @id @default(autoincrement())
-  deadline    DateTime?
-  conclusion  DateTime?
-  status      Int       @default(0)
-  description String
-  effort      Decimal?
-  Project     Project?  @relation(fields: [projectId], references: [id])
-  projectId   Int?
-}
-
-model Project {
-  id    Int    @id @default(autoincrement())
-  name  String
-  goals Goal[]
+  id                 Int       @id @default(autoincrement())
+  description        String
+  completionDeadline DateTime?
+  completionDate     DateTime?
+  user               User?     @relation(fields: [userId], references: [id])
+  userId             Int?
+  observation        String?
 }

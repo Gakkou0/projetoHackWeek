@@ -1,7 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: black;
+  color: aliceblue;
+}
+
 .button {
   margin: 10px;
 }
 
-/* body {
-  background-color: aquamarine;
-} */
+.form {
+  margin-left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  text-align: center;
+  color: aliceblue;
+}
+
+.input {
+  width: 350px;
+  text-align: justify;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+  color: aliceblue;
+  font-weight: bold;
+  transition: 0.1s;
+}
+
+.link:hover {
+  color: rgb(180, 125, 180);
+  transition: 0.1s;
+}
+
+p {
+  color: aliceblue;
+  margin: 0;
+  padding: 0;
+}

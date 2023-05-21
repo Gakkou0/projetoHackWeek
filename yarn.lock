@@ -21348,6 +21348,7 @@ __metadata:
     "@emotion/styled": ^11.11.0
     "@mui/material": ^5.13.1
     "@redwoodjs/core": 5.2.1
+    sweetalert2: ^11.7.5
   languageName: unknown
   linkType: soft
 
@@ -22810,6 +22811,13 @@ __metadata:
   dependencies:
     tslib: ^2.0.3
   checksum: 6a47c1926e06395ead750905e103be388aeec8c9697f20b14bc3e1e86fcb4fc78e5033197afe6cc8bbed80f0a4ee1f184b0fa22eec7f4a767bdfd278683d52eb
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:^11.7.5":
+  version: 11.7.5
+  resolution: "sweetalert2@npm:11.7.5"
+  checksum: 473bd03c7138e83bdb013fbe4bb75cd399787cebeb33ff220101d8027678d27bae409cdc9b380280032e6202ee9c766d202bebe951399565f0290233da869242
   languageName: node
   linkType: hard
 

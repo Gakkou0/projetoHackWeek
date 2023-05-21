@@ -1,3 +1,5 @@
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -6,11 +8,19 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
+
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider>
-        <Routes />
+        <ThemeProvider theme={darkTheme}>
+          <Routes />
+        </ThemeProvider>
       </RedwoodApolloProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>

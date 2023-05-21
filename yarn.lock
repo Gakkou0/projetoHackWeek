@@ -3851,6 +3851,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/icons-material@npm:^5.11.16":
+  version: 5.11.16
+  resolution: "@mui/icons-material@npm:5.11.16"
+  dependencies:
+    "@babel/runtime": ^7.21.0
+  peerDependencies:
+    "@mui/material": ^5.0.0
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 22099e54ccf8aaf0b7972e4626686999048094b8d783b6e293682cdc4b92da6dbd158709dce24e459babf728b17b625a89f6df40ba8a8cd4a28c6279c7a6293b
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^5.13.1":
   version: 5.13.1
   resolution: "@mui/material@npm:5.13.1"
@@ -21346,8 +21362,10 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.11.0
     "@emotion/styled": ^11.11.0
+    "@mui/icons-material": ^5.11.16
     "@mui/material": ^5.13.1
     "@redwoodjs/core": 5.2.1
+    sweetalert2: ^11.7.5
   languageName: unknown
   linkType: soft
 
@@ -22810,6 +22828,13 @@ __metadata:
   dependencies:
     tslib: ^2.0.3
   checksum: 6a47c1926e06395ead750905e103be388aeec8c9697f20b14bc3e1e86fcb4fc78e5033197afe6cc8bbed80f0a4ee1f184b0fa22eec7f4a767bdfd278683d52eb
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:^11.7.5":
+  version: 11.7.5
+  resolution: "sweetalert2@npm:11.7.5"
+  checksum: 473bd03c7138e83bdb013fbe4bb75cd399787cebeb33ff220101d8027678d27bae409cdc9b380280032e6202ee9c766d202bebe951399565f0290233da869242
   languageName: node
   linkType: hard
 

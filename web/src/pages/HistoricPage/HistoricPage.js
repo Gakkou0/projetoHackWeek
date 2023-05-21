@@ -4,18 +4,11 @@ import AppBar from 'src/components/AppBar'
 import Modal from 'src/components/Modal'
 import SpeedDial from 'src/components/SpeedDial'
 
-const DashboardPage = () => {
+const HistoricPage = () => {
   return (
     <>
       <AppBar/>
-      <Modal
-        title="HUGOSTOSO"
-        description="HUGO SONIC DA SILVA"
-      />
-      <SpeedDial
-      />
     </>
   )
 }
-
-export default DashboardPage
+export default HistoricPage

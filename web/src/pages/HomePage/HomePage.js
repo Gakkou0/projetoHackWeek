@@ -10,7 +10,7 @@ const HomePage = () => {
       <MetaTags title="Home" description="Home page" />
 
       <p>
-        <Link to={routes.home()}>
+        <Link to={routes.login()}>
           <Button variant="contained" style={{ margin: '5px' }}>
             Entrar
           </Button>

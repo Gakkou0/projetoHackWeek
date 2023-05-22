@@ -7,7 +7,7 @@ import {
   MenuItem,
   FormControl,
   Button,
-  Typography
+  Typography,
 } from '@mui/material'
 import Swal from 'sweetalert2'
 
@@ -16,10 +16,21 @@ import { Link } from '@redwoodjs/router'
 import { useMutation, gql } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-
 const CREATE_USER_MUTATION = gql`
-  mutation CreateUserMutation($name: String!, $email: String!, $password: String!, $userType: Int!) {
-    createUser(input: { name: $name, email: $email, password: $password, userType: $userType}) {
+  mutation CreateUserMutation(
+    $name: String!
+    $email: String!
+    $password: String!
+    $userType: Int!
+  ) {
+    createUser(
+      input: {
+        name: $name
+        email: $email
+        password: $password
+        userType: $userType
+      }
+    ) {
       id
       name
       email
@@ -45,14 +56,15 @@ const UserForm = () => {
         color: 'aliceblue',
         icon: 'success',
         timerProgressBar: true,
-        didOpen: () => {
-        },
+        didOpen: () => {},
         willClose: () => {
           clearInterval(timerInterval)
-        }
+          window.location.replace('/')
+        },
       })
     },
     onError: (error) => {
+      console.log(error)
       let timerInterval
       Swal.fire({
         title: 'Erro!',
@@ -62,11 +74,10 @@ const UserForm = () => {
         color: 'aliceblue',
         icon: 'error',
         timerProgressBar: true,
-        didOpen: () => {
-        },
+        didOpen: () => {},
         willClose: () => {
           clearInterval(timerInterval)
-        }
+        },
       })
     },
   })
@@ -106,92 +117,96 @@ const UserForm = () => {
 
   return (
     <>
-        <Form onSubmit={onSubmit} className='form'>
-
+      <Form onSubmit={onSubmit} className="form">
         <Typography variant="h4" component="h2">
           Novo usuário
         </Typography>
 
-          <TextField
-            name="name"
-            label="Nome"
-            value={name ? name : "" }
-            onChange={handleNameChange}
-            className="input"
+        <TextField
+          name="name"
+          label="Nome"
+          value={name ? name : ''}
+          onChange={handleNameChange}
+          className="input"
+          style={{ margin: '7px' }}
+          validation={{
+            required: true,
+            validate: (value) => {
+              if (!value || value.trim() === '') {
+                return 'Nome é obrigatório'
+              }
+            },
+          }}
+        />
+        <FieldError name="name" className="error" />
+
+        <FormControl>
+          <InputLabel
+            id="demo-simple-select-label"
             style={{ margin: '7px' }}
-            validation={{
-              required: true,
-              validate: (value) => {
-                if (!value || value.trim() === '') {
-                  return 'Nome é obrigatório'
-                }
-              },
-            }}
-          />
-          <FieldError name="name" className="error" />
-
-          <FormControl>
-            <InputLabel id="demo-simple-select-label" style={{ margin: '7px' }} className="input">Tipo da conta</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              name="userType"
-              value={userType}
-              validation={{ required: true }}
-              label="Tipo da conta"
-              className="input"
-              style={{ margin: '7px' }}
-              onChange={handleUserTypeChange}
-            >
-              <MenuItem value={0}>Estudante</MenuItem>
-              <MenuItem value={1}>Orientador</MenuItem>
-              <MenuItem value={2}>Co-orientador</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FieldError name="userType" className="rw-field-error" />
-
-          <TextField
-            name="email"
-            label="Email"
-            value={email ? email : "" }
-            onChange={handleEmailChange}
             className="input"
-            style={{ margin: '7px' }}
-            validation={{
-              required: true,
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: 'Email inválido',
-              },
-            }}
-          />
-
-          <FieldError name="email" className="rw-field-error" />
-
-          <TextField
-            name="password"
-            label="Senha"
-            value={password ? password : "" }
-            onChange={handlePasswordChange}
-            className="input"
-            style={{ margin: '7px' }}
+          >
+            Tipo da conta
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            name="userType"
+            value={userType}
             validation={{ required: true }}
-            type="password"
-          />
+            label="Tipo da conta"
+            className="input"
+            style={{ margin: '7px' }}
+            onChange={handleUserTypeChange}
+          >
+            <MenuItem value={0}>Estudante</MenuItem>
+            <MenuItem value={1}>Orientador</MenuItem>
+            <MenuItem value={2}>Co-orientador</MenuItem>
+          </Select>
+        </FormControl>
 
-          <FieldError name="password" className="rw-field-error" />
+        <FieldError name="userType" className="rw-field-error" />
 
-          <Button variant="contained" type="submit" style={{ margin: '5px' }}>
-              Criar conta
-          </Button>
+        <TextField
+          name="email"
+          label="Email"
+          value={email ? email : ''}
+          onChange={handleEmailChange}
+          className="input"
+          style={{ margin: '7px' }}
+          validation={{
+            required: true,
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Email inválido',
+            },
+          }}
+        />
 
+        <FieldError name="email" className="rw-field-error" />
 
-          <p>Já possui uma conta?</p>
-          <Link to="/login" className="link">
-            Entrar
-          </Link>
-        </Form>
+        <TextField
+          name="password"
+          label="Senha"
+          value={password ? password : ''}
+          onChange={handlePasswordChange}
+          className="input"
+          style={{ margin: '7px' }}
+          validation={{ required: true }}
+          type="password"
+        />
+
+        <FieldError name="password" className="rw-field-error" />
+
+        <Button variant="contained" type="submit" style={{ margin: '5px' }}>
+          Criar conta
+        </Button>
+
+        <p>Já possui uma conta?</p>
+        <Link to="/login" className="link">
+          Entrar
+        </Link>
+      </Form>
     </>
   )
 }

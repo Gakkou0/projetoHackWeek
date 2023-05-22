@@ -1,24 +1,38 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Backdrop from '@mui/material/Backdrop';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import SaveIcon from '@mui/icons-material/Save';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 
-const actions = [
-  { icon: <SaveIcon />, name: 'Criar Reunião' },
-  { icon: <SaveIcon />, name: 'Criar Projeto' },
+export const actions = [
+  { icon: <GroupOutlinedIcon />, name: 'Criar reunião'},
+  { icon: <NoteAddOutlinedIcon />, name: 'Criar projeto'},
 ];
 
-export default function SpeedDialTooltipOpen() {
+export default function SpeedDialTooltipOpen({ onClick }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
+  const handleClick = (action) => {
+    onClick(action.name);
+    handleOpen();
+  };
+
   return (
-    <Box sx={{ height: 330, transform: 'translateZ(0px)', flexGrow: 1 }}>
-      <Backdrop open={open} />
+    <div
+      style={{
+        position: 'fixed',
+        bottom: '5%',
+        right: '5%',
+        height: 'calc(50vh - 32px)',
+        width: 'calc(30vw - 32px)',
+        transform: 'translateZ(0px)',
+        flexGrow: 1
+      }}
+    >
       <SpeedDial
         ariaLabel="SpeedDial tooltip example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -31,12 +45,15 @@ export default function SpeedDialTooltipOpen() {
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
+            onClick={() => handleClick(action)}
             tooltipTitle={action.name}
             tooltipOpen
-            onClick={handleClose}
+            sx={{
+              whiteSpace: 'nowrap',
+            }}
           />
         ))}
       </SpeedDial>
-    </Box>
+    </div>
   );
 }

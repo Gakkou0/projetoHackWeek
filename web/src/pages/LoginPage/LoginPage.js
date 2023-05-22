@@ -5,12 +5,15 @@ import { Link/*, routes*/ } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import LoadingProgress from 'src/components/LoadingProgress';
 import AnimatedPage from 'src/components/LoadingProgress/AnimatedPage';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import defaultTheme from 'src/components/DefaultTheme/DefaultTheme';
 
 const LoginPage = () => {
   return (
 
     <>
     <AnimatedPage>
+    <ThemeProvider theme={defaultTheme}>
     <LoadingProgress/>
       <MetaTags title="Login" description="Login page" />
       <div sx={
@@ -56,6 +59,7 @@ const LoginPage = () => {
         </Link>
       </Form>
       </div>
+      </ThemeProvider>
     </AnimatedPage>
     </>
   )

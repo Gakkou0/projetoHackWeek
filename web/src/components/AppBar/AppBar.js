@@ -14,9 +14,26 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link, routes } from '@redwoodjs/router';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = ['Dashboard', 'Conta', 'Histórico', 'Sair'];
+
+const getRouteForItem = (item) => {
+  // Aqui você pode mapear cada item do menu para a rota correspondente no seu aplicativo
+  switch (item) {
+    case 'Dashboard':
+      return routes.dashboard();
+    case 'Conta':
+      return routes.dashboard();
+    case 'Histórico':
+      return routes.historic();
+    case 'Sair':
+      return routes.dashboard();
+    default:
+      return '/';
+  }
+};
 
 function DrawerAppBar(props) {
   const { window } = props;
@@ -29,13 +46,17 @@ function DrawerAppBar(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        TCC
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton
+              component={Link}
+              to={getRouteForItem(item)}
+              sx={{ textAlign: 'center' }}
+            >
               <ListItemText primary={item} />
             </ListItemButton>
           </ListItem>
@@ -68,8 +89,13 @@ function DrawerAppBar(props) {
             TCC
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+            {navItems.map((item, index) => (
+              <Button
+                key={item}
+                component={Link}
+                to={getRouteForItem(item)}
+                sx={{ color: index === navItems.length - 1 ? 'red' : '#fff' }}
+              >
                 {item}
               </Button>
             ))}
@@ -95,9 +121,7 @@ function DrawerAppBar(props) {
       </Box>
       <Box component="main" sx={{ p: 3 }}>
         <Toolbar />
-        <Typography>
-        {/* /*Texto aqui*/}
-        </Typography>
+        <Typography>{/* Texto aqui */}</Typography>
       </Box>
     </Box>
   );

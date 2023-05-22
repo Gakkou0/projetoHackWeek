@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #D9D9D9;
+  height: 35vh;
+  width: 45vh;
+  border-radius: 20px;
+}
+
+.cardMid p{
+  color: #000000;
+  font-size: 18px;
+}
+
+.cardHeader{
+  background-color: #18122B;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 20px;
+}
+
+/* .cardIcon {
+  height: 100px;
+  width: 100px;
+} */
+
+.iconeImage {
+  height: 100px;
+  width: 100px;
+  border-radius: 500px;
+  position: absolute;
+  left: 286.43px;
+  top: 40.47px;
+}
+
+.cardMid{
+  padding: 20px;
+}
+
+.meetingDate p{
+  position: absolute;
+
+}

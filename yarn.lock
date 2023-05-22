@@ -3994,7 +3994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^5.13.1":
+"@mui/utils@npm:^5.12.3, @mui/utils@npm:^5.13.1":
   version: 5.13.1
   resolution: "@mui/utils@npm:5.13.1"
   dependencies:
@@ -4006,6 +4006,54 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
   checksum: 05f28ed16c7c15deecb7d55962efa21f073f09342758e01bf6a618dd4532a8bf074d6e3c306cdf5f3c6d7b92f6729b0b157e828a13aff9d2445b1da997e1a7eb
+  languageName: node
+  linkType: hard
+
+"@mui/x-date-pickers@npm:^6.5.0":
+  version: 6.5.0
+  resolution: "@mui/x-date-pickers@npm:6.5.0"
+  dependencies:
+    "@babel/runtime": ^7.21.0
+    "@mui/utils": ^5.12.3
+    "@types/react-transition-group": ^4.4.6
+    clsx: ^1.2.1
+    prop-types: ^15.8.1
+    react-transition-group: ^4.4.5
+  peerDependencies:
+    "@emotion/react": ^11.9.0
+    "@emotion/styled": ^11.8.1
+    "@mui/base": ^5.0.0-alpha.87
+    "@mui/material": ^5.8.6
+    "@mui/system": ^5.8.0
+    date-fns: ^2.25.0
+    date-fns-jalali: ^2.13.0-0
+    dayjs: ^1.10.7
+    luxon: ^3.0.2
+    moment: ^2.29.4
+    moment-hijri: ^2.1.2
+    moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0 || ^0.10.0
+    react: ^17.0.2 || ^18.0.0
+    react-dom: ^17.0.2 || ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    date-fns:
+      optional: true
+    date-fns-jalali:
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+    moment-hijri:
+      optional: true
+    moment-jalaali:
+      optional: true
+  checksum: 63c6e0c2433d8371814e8073329b6a595733b518645a11236e6bda069d027e0d83551e8fc5c385f5738454dfd1006660153c2c09908894fa2c89785179e1a8ca
   languageName: node
   linkType: hard
 
@@ -11267,6 +11315,13 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.21.0
   checksum: e4b521fbf22bc8c3db332bbfb7b094fd3e7627de0259a9d17c7551e2d2702608a7307a449206065916538e384f37b181565447ce2637ae09828427aed9cb5581
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.7":
+  version: 1.11.7
+  resolution: "dayjs@npm:1.11.7"
+  checksum: 41a54853c8b8bf0fa94a5559eec98b3e4d11b31af81a9558a159d40adeaafb1f3414e8c41a4e3277281d97687d8252f400015e1f715b47f8c24d88a9ebd43626
   languageName: node
   linkType: hard
 
@@ -21401,7 +21456,9 @@ __metadata:
     "@emotion/styled": ^11.11.0
     "@mui/icons-material": ^5.11.16
     "@mui/material": ^5.13.1
+    "@mui/x-date-pickers": ^6.5.0
     "@redwoodjs/core": 5.2.1
+    dayjs: ^1.11.7
     framer-motion: ^10.12.12
     sweetalert2: ^11.7.5
   languageName: unknown

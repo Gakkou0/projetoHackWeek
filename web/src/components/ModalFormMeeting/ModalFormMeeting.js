@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { Button, FormControl, Modal, TextField } from '@mui/material'
+import { Button, Modal, TextField, Select, MenuItem} from '@mui/material'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import '../../modal.css'
 
 const ModalForm = () => {
@@ -7,9 +10,12 @@ const ModalForm = () => {
   const [formData, setFormData] = useState({
     // inicialize o estado dos campos do formulário aqui
     // por exemplo:
-    name: '',
-    local: '',
-    project: ''
+    title: '',
+    location: '',
+    project: '',
+    datetime:'',
+    observations: '',
+    deliverable: ''
   })
 
   const handleOpen = () => {
@@ -43,32 +49,53 @@ const ModalForm = () => {
       </Button>
       <Modal open={open} onClose={handleClose}>
         <div className='modal'>
-          <FormControl size='small' onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <TextField
-              name="name"
-              label="Nome"
+              name="title"
+              label="Título"
               value={formData.name}
               onChange={handleChange}
               fullWidth
               required
             />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                name="datetime"
+                label="Data e hora da reunião"
+                value={formData.name}
+                onChange={handleChange}
+                fullWidth
+                required
+                />
+            </LocalizationProvider>
             <TextField
-              name="email"
-              label="E-mail"
+              name="location"
+              label="Local"
               value={formData.email}
               onChange={handleChange}
               fullWidth
               required
             />
-            <TextField
-              name=''
-              label=''
+            <Select
+              name='project'
+              label="Projeto"
               value={formData.email}
-              />
+              onChange={handleChange}
+              fullWidth
+              required
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+            <TextField />
+            <Button variant="contained" color="primary">
+              Cancelar
+            </Button>
             <Button type="submit" variant="contained" color="primary">
               Salvar
             </Button>
-          </FormControl>
+          </form>
         </div>
       </Modal>
     </div>

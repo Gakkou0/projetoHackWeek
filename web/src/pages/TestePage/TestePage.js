@@ -1,7 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import Card from 'src/components/MeetingCard/MeetingCard'
-import ModalForm from 'src/components/ModalForm/ModalForm'
+import ModalForm from 'src/components/ModalFormMeeting/ModalFormMeeting'
 
 const TestePage = () => {
   return (

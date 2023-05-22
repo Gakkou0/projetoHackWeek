@@ -26,6 +26,8 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.1",
+    "@mui/x-date-pickers": "^6.5.0",
+    "dayjs": "^1.11.7",
     "framer-motion": "^10.12.12",
     "sweetalert2": "^11.7.5"
   }

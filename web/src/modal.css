@@ -1,10 +1,11 @@
 .modal{
   width: 500px;
   height: 500px;
-  background: #b0b0b0;
+  background: #3c3c3c;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   border-radius: 20px;
+
 }

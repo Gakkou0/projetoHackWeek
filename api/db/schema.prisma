@@ -32,6 +32,7 @@ model User {
 
 model Meeting {
   id                 Int      @id @default(autoincrement())
+  title              String
   datetime           DateTime
   advisor            User     @relation("advisor", fields: [advisorId], references: [id])
   coadvisor          User?    @relation("coadvisor", fields: [coadvisorId], references: [id])

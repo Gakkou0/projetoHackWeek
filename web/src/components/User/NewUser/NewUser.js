@@ -1,6 +1,8 @@
 import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+import LoadingProgress from 'src/components/LoadingProgress';
+import AnimatedPage from 'src/components/LoadingProgress/AnimatedPage';
 
 import UserForm from 'src/components/User/UserForm'
 
@@ -28,9 +30,12 @@ const NewUser = () => {
   }
 
   return (
+    <AnimatedPage>
+    <LoadingProgress/>
     <div className="rw-segment">
       <UserForm onSave={onSave} loading={loading} error={error} />
     </div>
+    </AnimatedPage>
   )
 }
 

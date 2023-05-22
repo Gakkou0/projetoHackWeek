@@ -7,7 +7,8 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SaveIcon from '@mui/icons-material/Save';
 
 const actions = [
-  { icon: <SaveIcon />, name: 'Criar' },
+  { icon: <SaveIcon />, name: 'Criar Reunião' },
+  { icon: <SaveIcon />, name: 'Criar Projeto' },
 ];
 
 export default function SpeedDialTooltipOpen() {

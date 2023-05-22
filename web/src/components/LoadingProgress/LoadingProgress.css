@@ -1,0 +1,15 @@
+@keyframes smoothAnimation {
+  0% {
+    opacity: 1;
+
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.progressSmoth {
+
+  animation: smoothAnimation 1s ease-in-out forwards;
+}

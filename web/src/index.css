@@ -11,6 +11,11 @@ body {
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
   margin-left: 50%;
   transform: translateX(-50%);
   width: 400px;
@@ -18,10 +23,19 @@ body {
   color: aliceblue;
 }
 
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 .input {
   width: 350px;
   text-align: justify;
 }
+
 
 .link {
   display: block;
@@ -41,3 +55,6 @@ p {
   margin: 0;
   padding: 0;
 }
+
+
+

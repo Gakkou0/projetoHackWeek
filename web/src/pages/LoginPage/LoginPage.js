@@ -1,15 +1,29 @@
 /* eslint-disable prettier/prettier */
 import { TextField, Button, Typography } from '@mui/material'
-
 import { Form/*, FieldError, Submit*/ } from '@redwoodjs/forms'
 import { Link/*, routes*/ } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import LoadingProgress from 'src/components/LoadingProgress';
+import AnimatedPage from 'src/components/LoadingProgress/AnimatedPage';
 
 const LoginPage = () => {
   return (
-    <>
-      <MetaTags title="Login" description="Login page" />
 
+    <>
+    <AnimatedPage>
+    <LoadingProgress/>
+      <MetaTags title="Login" description="Login page" />
+      <div sx={
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '50%',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: '#635985'
+      }} >
       <Form className="form">
         <Typography variant="h4" component="h2">
           Entrar
@@ -41,6 +55,8 @@ const LoginPage = () => {
           Crie uma conta
         </Link>
       </Form>
+      </div>
+    </AnimatedPage>
     </>
   )
 }

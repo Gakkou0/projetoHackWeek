@@ -27,11 +27,12 @@ model User {
   meetingsAsAdvisor   Meeting[] @relation("advisor")
   meetingsAsCoadvisor Meeting[] @relation("coadvisor")
   meetingsAsStudent   Meeting[] @relation("student")
-  goals               Goal[]
+  projects            Project[]
 }
 
 model Meeting {
   id                 Int      @id @default(autoincrement())
+  title              String
   datetime           DateTime
   advisor            User     @relation("advisor", fields: [advisorId], references: [id])
   coadvisor          User?    @relation("coadvisor", fields: [coadvisorId], references: [id])
@@ -55,4 +56,15 @@ model Goal {
   user               User?     @relation(fields: [userId], references: [id])
   userId             Int?
   observation        String?
+  project            Project     @relation(fields: [projectId], references: [id])
+  projectId          Int?
+}
+
+model Project {
+    id                 Int       @id @default(autoincrement())
+    name               String
+    advisor            User     @relation("advisor", fields: [advisorId], references: [id])
+    coadvisor          User?    @relation("coadvisor", fields: [coadvisorId], references: [id])
+    student            User     @relation("student", fields: [studentId], references: [id])
+    goals              Goal[]
 }

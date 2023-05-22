@@ -16,6 +16,7 @@ const Routes = () => {
   return (
     <Router>
       <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/teste" page={TestePage} name="testePege" />
       <Route path="/" page={HomePage} name="home" />
       <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
         <Route path="/users/new" page={UserNewUserPage} name="newUser" />

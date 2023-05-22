@@ -88,7 +88,12 @@ const ModalForm = () => {
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
-            <TextField />
+            <TextField
+              name="observations"
+              label="Observações"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth/>
             <Button variant="contained" color="primary">
               Cancelar
             </Button>

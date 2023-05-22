@@ -53,18 +53,15 @@ model Goal {
   description        String
   completionDeadline DateTime?
   completionDate     DateTime?
-  user               User?     @relation(fields: [userId], references: [id])
-  userId             Int?
   observation        String?
-  project            Project     @relation(fields: [projectId], references: [id])
+  Project            Project?  @relation(fields: [projectId], references: [id])
   projectId          Int?
 }
 
 model Project {
-    id                 Int       @id @default(autoincrement())
-    name               String
-    advisor            User     @relation("advisor", fields: [advisorId], references: [id])
-    coadvisor          User?    @relation("coadvisor", fields: [coadvisorId], references: [id])
-    student            User     @relation("student", fields: [studentId], references: [id])
-    goals              Goal[]
+  id     Int    @id @default(autoincrement())
+  name   String
+  user   User?  @relation(fields: [userId], references: [id])
+  userId Int?
+  goals  Goal[]
 }

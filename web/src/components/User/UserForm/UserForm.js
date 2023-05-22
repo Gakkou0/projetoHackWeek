@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-empty-pattern */
-/* eslint-disable prettier/prettier */
 import { useState } from 'react'
 
 import {

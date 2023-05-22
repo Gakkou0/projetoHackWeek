@@ -18,7 +18,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 
 const CREATE_USER_MUTATION = gql`
-  mutation CreateUserMutation($name: String, $email: String, $password: String, $userType: Int) {
+  mutation CreateUserMutation($name: String!, $email: String!, $password: String!, $userType: Int!) {
     createUser(input: { name: $name, email: $email, password: $password, userType: $userType}) {
       id
       name

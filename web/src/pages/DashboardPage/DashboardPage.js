@@ -12,13 +12,8 @@ const DashboardPage = () => {
       <LoadingProgress/>
       <AnimatedPage>
       <AppBar/>
-      <Modal
-        title="HUGOSTOSO"
-        description="HUGO SONIC DA SILVA"
-      />
-      <SpeedDial
-      />
       </AnimatedPage>
+      <SpeedDial/>
     </>
   )
 }

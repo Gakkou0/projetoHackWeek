@@ -82,7 +82,7 @@ const Card = ({ cosupervisor, viewer, id }) => {
         )}
       </div>
 
-      <div className="cardMid">
+      <div className="CardMid">
         {cosupervisor ? (
           <div>
             <p>Orientador: {advisor}</p>

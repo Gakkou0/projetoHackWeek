@@ -14,11 +14,11 @@ export default () => (
                 align-items: center;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
                 text-align: center;
-                background-color: #E2E8F0;
+                background-color: black;
                 height: 100vh;
               }
               section {
-                background-color: white;
+                background-color: #635985;
                 border-radius: 0.25rem;
                 width: 32rem;
                 padding: 1rem;
@@ -30,7 +30,7 @@ export default () => (
                 margin: 0;
                 font-weight: 500;
                 line-height: 1;
-                color: #2D3748;
+                color: white;
               }
             `,
       }}
@@ -43,3 +43,4 @@ export default () => (
     </section>
   </main>
 )
+

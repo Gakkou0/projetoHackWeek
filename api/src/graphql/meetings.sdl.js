@@ -1,6 +1,7 @@
 export const schema = gql`
   type Meeting {
     id: Int!
+    title: String
     datetime: DateTime!
     advisor: User!
     coadvisor: User
@@ -22,6 +23,7 @@ export const schema = gql`
   }
 
   input CreateMeetingInput {
+    title: String
     datetime: DateTime!
     observations: String
     deliverable: String
@@ -35,6 +37,7 @@ export const schema = gql`
   }
 
   input UpdateMeetingInput {
+    title: String
     datetime: DateTime
     observations: String
     deliverable: String

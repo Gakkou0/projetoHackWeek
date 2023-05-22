@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Modal, TextField, Select, MenuItem} from '@mui/material'
+import { Button, Modal, TextField, Select, MenuItem, Checkbox} from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -94,12 +94,15 @@ const ModalForm = () => {
               value={formData.email}
               onChange={handleChange}
               fullWidth/>
-            <Button variant="contained" color="primary">
-              Cancelar
-            </Button>
-            <Button type="submit" variant="contained" color="primary">
-              Salvar
-            </Button>
+            <Checkbox color="primary" checked={true} onChange={handleChange}/>
+            <div sx={{}}>
+              <Button variant="contained" color="primary">
+                Cancelar
+              </Button>
+              <Button type="submit" variant="contained" color="primary">
+                Salvar
+              </Button>
+            </div>
           </form>
         </div>
       </Modal>

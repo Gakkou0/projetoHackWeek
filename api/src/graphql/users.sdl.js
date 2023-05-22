@@ -8,7 +8,7 @@ export const schema = gql`
     meetingsAsAdvisor: [Meeting]!
     meetingsAsCoadvisor: [Meeting]!
     meetingsAsStudent: [Meeting]!
-    goals: [Goal]!
+    Projects: [Project]
   }
 
   type Query {

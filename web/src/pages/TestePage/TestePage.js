@@ -8,8 +8,8 @@ const TestePage = () => {
     <>
       <MetaTags title="Teste" description="Teste page" />
 
-      <Card cosupervisor={true} viewer={"any"} id={1}/>
-      {/* <ModalForm></ModalForm> */}
+      {/* <Card cosupervisor={true} viewer={"any"} id={1}/> */}
+      <ModalForm></ModalForm>
     </>
   )
 }

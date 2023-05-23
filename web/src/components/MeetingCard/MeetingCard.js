@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ModalFormMeeting from '../ModalFormMeeting/ModalFormMeeting';
 import ModalFormMeetingData from '../ModalFormMeeting/ModalFormMeetingData';
+import ModalFormMeeting from '../ModalFormMeeting/ModalFormMeeting';
 import { useQuery, gql } from '@redwoodjs/web';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -144,6 +144,12 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
     setOpen(false);
   };
 
+  const [openModalFormMeetingData, setOpenModalFormMeetingData] = useState(false);
+
+  const handleDateShow = () => {
+    setOpenModalFormMeetingData(true);
+  };
+
   const ConfirmationModal = styled(Modal)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -190,6 +196,7 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
     return hash;
   };
 
+
   return (
     <div
       style={{
@@ -197,8 +204,7 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
         flexDirection: 'column',
         alignItems: 'content',
         width: '345px', // Largura fixa para a caixa
-      }}
-    >
+      }}>
       <Card
         sx={{
           maxWidth: 345,
@@ -206,9 +212,8 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
           color: 'aliceblue',
           backgroundColor: cardColor,
           boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
-        }}
-      >
-        <CardActionArea onClick={() => setEditModalOpen(true)}>
+        }}>
+        <CardActionArea onClick={handleDateShow}>
           <CardHeader
             avatar={
               advisorLoading ? (
@@ -303,27 +308,34 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
             <Box sx={modalContentStyle}
             style={{
               color: 'aliceblue',
-              backgroundColor: '#171717',
+              backgroundColor: '#272727',
               boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
+              borderRadius: '5px',
             }}
             >
-              <Typography id="modal-title" variant="h6" component="h2">
-                Deseja deletar?
+              <Typography id="modal-title" variant="h6" component="h2"
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+
+              }}>
+                Deseja deletar? <br></br>
+                {meetingData?.meeting?.title}
               </Typography>
               <Box sx={{ mt: 2 }}>
                 <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
                   Sim
                 </Button>
                 <Button onClick={handleClose} variant="contained" color="primary">
-                  NãoR
+                  Não
                 </Button>
               </Box>
             </Box>
           </ThemeProvider>
         </ConfirmationModal>
-        <ModalFormMeetingData
-          meeting={meetingData?.meeting}
-        />
+        {openModalFormMeetingData && (
+        <ModalFormMeetingData meeting={meetingData?.meeting} handleClose={() => setOpenModalFormMeetingData(false)} />
+      )}
       </Card>
     </div>
   );

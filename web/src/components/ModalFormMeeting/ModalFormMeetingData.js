@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { Modal, Typography, Select, MenuItem, Checkbox, Button } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import '../../modal.css';
+import Box from '@mui/material/Box';
+import defaultTheme from '../DefaultTheme/DefaultTheme';
+import { ThemeProvider } from '@emotion/react';
 
-const ModalFormMeetingData = ({meeting}) => {
-  const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
+const ModalFormMeetingData = ({meeting, handleClose}) => {
+  const [open, setOpen] = useState(true);
+
+  const handleCloses = () => {
     setOpen(false);
   };
 
@@ -16,12 +18,35 @@ const ModalFormMeetingData = ({meeting}) => {
     setOpen(true);
   };
 
+
   return (
-    <div
-    >
-      {open && (
-        <Modal open={open} onClose={handleClose}>
-          <div className="modal">
+    <div>
+      <ThemeProvider theme={defaultTheme}>
+        {open && (
+          <Modal
+            open={open}
+            onClose={handleClose}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              style={{
+                color: 'aliceblue',
+                backgroundColor: '#272727',
+                borderRadius: '5px',
+              }}
+            >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+            }}>
             <h2>Detalhes da Reunião</h2>
             <form>
               <Typography variant="body1">
@@ -48,13 +73,13 @@ const ModalFormMeetingData = ({meeting}) => {
                   Fechar
                 </Button>
               </div>
+
             </form>
           </div>
+          </Box>
         </Modal>
       )}
-      <Button variant="contained" color="primary" onClick={openModalFromFunction}>
-        Abrir Modal
-      </Button>
+    </ThemeProvider>
     </div>
   );
 };

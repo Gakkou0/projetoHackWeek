@@ -4,6 +4,7 @@ import AppBar from 'src/components/AppBar'
 import TextField  from 'src/components/TextField'
 import LoadingProgress from 'src/components/LoadingProgress';
 import AnimatedPage from 'src/components/LoadingProgress/AnimatedPage';
+import MeetingCardListBefore from 'src/components/MeetingListDate/MeetingListDateBefore';
 
 const HistoricPage = () => {
   return (
@@ -11,8 +12,9 @@ const HistoricPage = () => {
       <AnimatedPage>
       <LoadingProgress/>
       <AppBar/>
-      <TextField
-      />
+
+      <MeetingCardListBefore/>
+
       </AnimatedPage>
 
     </>

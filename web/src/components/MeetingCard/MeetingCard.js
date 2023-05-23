@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import ModalFormMeeting from '../ModalFormMeeting/ModalFormMeeting';
+import ModalFormMeetingData from '../ModalFormMeeting/ModalFormMeetingData';
 import { useQuery, gql } from '@redwoodjs/web';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -8,11 +10,16 @@ import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { CardActionArea, Skeleton } from '@mui/material';
 import { red, blue, green, yellow, orange, purple } from '@mui/material/colors';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { ThemeProvider } from '@emotion/react';
+import defaultTheme from '../DefaultTheme/DefaultTheme';
+import { useMutation } from '@redwoodjs/web';
 
 const MEETING_QUERY = gql`
   query FindMeetingById($id: Int!) {
@@ -42,6 +49,15 @@ const USER_QUERY = gql`
   }
 `;
 
+const DELETE_MEETING_MUTATION = gql`
+  mutation DeleteMeeting($id: Int!) {
+    deleteMeeting(id: $id) {
+      id
+    }
+  }
+`;
+
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -58,12 +74,13 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
   const [advisor, setAdvisor] = useState(null);
   const [student, setStudent] = useState(null);
   const [coadvisor, setCoadvisor] = useState(null);
+  const [deleteMeeting, { loading: deleteLoading, error: deleteError }] = useMutation(DELETE_MEETING_MUTATION)
+  const [cardColor, setCardColor] = useState(null);
+  const [indexColor, setIndexColor] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [cardData, setCardData] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const colors = [red[500], blue[500], green[500], yellow[500], orange[500], purple[500]];
-
-  const getRandomIndex = () => {
-    return Math.floor(Math.random() * colors.length);
-  };
 
   const { loading: meetingLoading, error: meetingError, data: meetingData } = useQuery(MEETING_QUERY, {
     variables: { id: id },
@@ -99,8 +116,78 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
     }
   }, [userData]);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  useEffect(() => {
+    if (id) {
+      const hash = hashCode(String(id));
+      const colorIndex = [red[500], blue[500], green[500], orange[500], purple[500]];
+      const colorCards = ['#2C3E50', '#34495E', '#1F3A93', '#512E5F', '#4A235A'];
+
+      setCardColor(colorCards[hash % colorCards.length]);
+      setIndexColor(colorIndex[hash % colorIndex.length]);
+
+    }
+  }, [id]);
+
+  const handleOpenModalEdit = () => {
+    setEditModalOpen(true);
+  };
+
+  const handleCloseModalEdit = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const ConfirmationModal = styled(Modal)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+
+  const modalContentStyle = {
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteMeeting({
+        variables: { id: id },
+        // Optionally, you can provide an `update` function to update the cache after successful deletion.
+        // update: (cache) => {
+        //   const normalizedId = cache.identify({ id: id, __typename: 'Meeting' });
+        //   cache.evict({ id: normalizedId });
+        //   cache.gc();
+        // },
+      });
+      handleClose();
+      window.location.reload();
+      // Optionally, you can perform additional actions after successful deletion, such as showing a success message or navigating to a different page.
+    } catch (error) {
+      console.log(error);
+      // Handle any error that occurs during deletion.
+    }
+  };
+
+  // Function to calculate hash code
+  const hashCode = (str) => {
+    let hash = 0;
+    if (str.length === 0) {
+      return hash;
+    }
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
   };
 
   return (
@@ -112,29 +199,45 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
         width: '345px', // Largura fixa para a caixa
       }}
     >
-      <Card sx={{ maxWidth: 345, margin: '10px' }}>
-        <CardActionArea>
+      <Card
+        sx={{
+          maxWidth: 345,
+          margin: '10px',
+          color: 'aliceblue',
+          backgroundColor: cardColor,
+          boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
+        }}
+      >
+        <CardActionArea onClick={() => setEditModalOpen(true)}>
           <CardHeader
             avatar={
               advisorLoading ? (
-                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton variant="circular" width={40} height={40} duration="5000" />
               ) : (
-                <Avatar sx={{ bgcolor: colors[getRandomIndex()] }} aria-label="recipe">
+                <Avatar
+                  sx={{
+                    bgcolor: indexColor,
+                  }}
+                  aria-label="recipe"
+                >
                   {advisor?.charAt(0)}
                 </Avatar>
               )
             }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
+            title={
+              meetingLoading ? (
+                <Skeleton height={24} width="80%" duration="5000" />
+              ) : (
+                meetingData?.meeting?.title || 'No Meeting Title'
+              )
             }
-            title={meetingLoading ? <Skeleton height={24} width="80%" /> : meetingData?.meeting?.title || 'No Meeting Title'}
             subheader={
               meetingLoading ? (
-                <Skeleton height={16} width="40%" />
+                <Skeleton height={16} width="40%" duration="5000" />
               ) : (
-                meetingData?.meeting?.datetime ? new Date(meetingData.meeting.datetime).toLocaleString() : 'No Meeting Datetime'
+                meetingData?.meeting?.datetime
+                  ? new Date(meetingData.meeting.datetime).toLocaleString()
+                  : 'No Meeting Datetime'
               )
             }
           />
@@ -157,12 +260,12 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
             >
               {meetingLoading ? (
                 <>
-                  <Skeleton height={16} width="80%" duration={2000}/>
-                  <Skeleton height={16} width="80%" duration={2000}/>
-                  <Skeleton height={16} width="80%" duration={2000}/>
-                  <Skeleton height={16} width="80%" duration={2000}/>
-                  <Skeleton height={16} width="80%" duration={2000}/>
-                  <Skeleton height={16} width="80%" duration={2000}/>
+                  <Skeleton height={16} width="80%" duration="5000" />
+                  <Skeleton height={16} width="80%" duration="5000" />
+                  <Skeleton height={16} width="80%" duration="5000" />
+                  <Skeleton height={16} width="80%" duration="5000" />
+                  <Skeleton height={16} width="80%" duration="5000" />
+                  <Skeleton height={16} width="80%" duration="5000" />
                 </>
               ) : (
                 <>
@@ -180,15 +283,47 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
               )}
             </Typography>
           </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-          </CardActions>
         </CardActionArea>
+        <CardActions disableSpacing>
+          <IconButton aria-label="Editar" onClick={handleOpenModalEdit}>
+            <EditOutlinedIcon />
+          </IconButton>
+          <IconButton aria-label="Deletar" onClick={handleOpen}>
+            <DeleteOutlinedIcon />
+          </IconButton>
+        </CardActions>
+
+        <ConfirmationModal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <ThemeProvider theme={defaultTheme}>
+            <Box sx={modalContentStyle}
+            style={{
+              color: 'aliceblue',
+              backgroundColor: '#171717',
+              boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
+            }}
+            >
+              <Typography id="modal-title" variant="h6" component="h2">
+                Deseja deletar?
+              </Typography>
+              <Box sx={{ mt: 2 }}>
+                <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
+                  Sim
+                </Button>
+                <Button onClick={handleClose} variant="contained" color="primary">
+                  NãoR
+                </Button>
+              </Box>
+            </Box>
+          </ThemeProvider>
+        </ConfirmationModal>
+        <ModalFormMeetingData
+          meeting={meetingData?.meeting}
+        />
       </Card>
     </div>
   );

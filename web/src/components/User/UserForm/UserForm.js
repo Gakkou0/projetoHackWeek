@@ -161,7 +161,6 @@ const UserForm = () => {
           >
             <MenuItem value={0}>Estudante</MenuItem>
             <MenuItem value={1}>Orientador</MenuItem>
-            <MenuItem value={2}>Co-orientador</MenuItem>
           </Select>
         </FormControl>
 

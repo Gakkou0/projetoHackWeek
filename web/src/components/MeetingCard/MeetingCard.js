@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ModalFormMeetingData from '../ModalFormMeeting/ModalFormMeetingData';
-import ModalFormMeeting from '../ModalFormMeeting/ModalFormMeeting';
+import ModalFormMeetingEdit from '../ModalFormMeeting/ModalFormMeetingEdit';
 import { useQuery, gql } from '@redwoodjs/web';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -82,6 +82,7 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
   const [open, setOpen] = useState(false);
 
 
+
   const { loading: meetingLoading, error: meetingError, data: meetingData } = useQuery(MEETING_QUERY, {
     variables: { id: id },
   });
@@ -142,6 +143,14 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleEdit = () => {
+    window.location.reload();
+  };
+
+  const editModalOpenFunction = () => {
+    setEditModalOpen(true);
   };
 
   const [openModalFormMeetingData, setOpenModalFormMeetingData] = useState(false);
@@ -297,7 +306,6 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
             <DeleteOutlinedIcon />
           </IconButton>
         </CardActions>
-
         <ConfirmationModal
           open={open}
           onClose={handleClose}
@@ -306,19 +314,19 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
         >
           <ThemeProvider theme={defaultTheme}>
             <Box sx={modalContentStyle}
-            style={{
-              color: 'aliceblue',
-              backgroundColor: '#272727',
-              boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
-              borderRadius: '5px',
-            }}
+              style={{
+                color: 'aliceblue',
+                backgroundColor: '#272727',
+                boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.2)',
+                borderRadius: '5px',
+              }}
             >
               <Typography id="modal-title" variant="h6" component="h2"
-              style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
+                style={{
+                  fontWeight: 'bold',
+                  textAlign: 'center',
 
-              }}>
+                }}>
                 Deseja deletar? <br></br>
                 {meetingData?.meeting?.title}
               </Typography>
@@ -334,8 +342,16 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
           </ThemeProvider>
         </ConfirmationModal>
         {openModalFormMeetingData && (
-        <ModalFormMeetingData meeting={meetingData?.meeting} handleClose={() => setOpenModalFormMeetingData(false)} />
-      )}
+          <ModalFormMeetingData meeting={meetingData?.meeting} handleClose={() => setOpenModalFormMeetingData(false)} />
+        )}
+
+        {editModalOpen && (
+          <ModalFormMeetingEdit
+            meeting={meetingData?.meeting}
+            handleClose={handleCloseModalEdit}
+            handleEdit={handleEdit}
+          />
+        )}
       </Card>
     </div>
   );

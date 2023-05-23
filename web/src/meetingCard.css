@@ -5,24 +5,23 @@
   height: 35vh;
   width: 45vh;
   border-radius: 20px;
+  margin: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+  transition: 0.3s;
+
 }
 
-.cardMid p{
+.cardMid p {
   color: #000000;
   font-size: 18px;
 }
 
-.cardHeader{
+.cardHeader {
   background-color: #18122B;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 20px;
 }
-
-/* .cardIcon {
-  height: 100px;
-  width: 100px;
-} */
 
 .iconeImage {
   height: 100px;
@@ -31,13 +30,41 @@
   position: absolute;
   left: 286.43px;
   top: 40.47px;
+  transform: translateX(-50%);
+  transition: 0.3s;
+
 }
 
-.cardMid{
+.cardMid {
   padding: 20px;
+  display: flex;
 }
 
-.meetingDate p{
+.meetingDate p {
   position: absolute;
+}
 
+/* Estilos responsivos */
+@media screen and (max-width: 600px) {
+  .card {
+    height: auto;
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .cardHeader {
+    padding: 10px;
+  }
+
+  .iconeImage {
+    height: 80px;
+    width: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -40px;
+  }
+
+  .cardMid p {
+    font-size: 16px;
+  }
 }

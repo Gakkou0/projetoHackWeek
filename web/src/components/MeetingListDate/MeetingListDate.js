@@ -26,11 +26,11 @@ const MeetingCardList = () => {
   const { loading, error, data } = useQuery(MEETINGS_QUERY);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div></div>;
   }
 
   const meetings = data.meetings;

@@ -10,12 +10,10 @@ import defaultTheme from 'src/components/DefaultTheme/DefaultTheme';
 
 const LoginPage = () => {
   return (
-
     <>
     <AnimatedPage>
     <ThemeProvider theme={defaultTheme}>
     <LoadingProgress/>
-      <MetaTags title="Login" description="Login page" />
       <div sx={
       {
         display: 'flex',
@@ -50,7 +48,11 @@ const LoginPage = () => {
           style={{ margin: '7px' }}
         />
 
-        <Button variant="contained" style={{ margin: '7px' }}>
+        <Button variant="contained" style={{ margin: '7px' }}
+         onClick={() => {
+          window.location.href = '/dashboard'
+        }}
+        >
           Entrar
         </Button>
 

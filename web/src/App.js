@@ -16,7 +16,7 @@ const darkTheme = createTheme({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+    <RedwoodProvider titleTemplate="TCC MANAGER">
       <RedwoodApolloProvider>
         <ThemeProvider theme={darkTheme}>
           <Routes />

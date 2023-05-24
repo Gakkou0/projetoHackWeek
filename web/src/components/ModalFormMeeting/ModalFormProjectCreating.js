@@ -46,6 +46,7 @@ const ModalFormProjectCreating = ({ handleClose, onSave }) => {
       });
       onSave(data.createProject);
       handleCloses();
+      console.log(data.createProject);
       window.location.reload();
     } catch (error) {
       console.error(error);

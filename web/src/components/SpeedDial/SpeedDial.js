@@ -19,9 +19,14 @@ export default function SpeedDialTooltipOpen({ onClick }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [openModal, setOpenModal] = React.useState(false);
+  const [openModalProject, setOpenModalProject] = React.useState(false);
 
   const handleIconClick = () => {
     setOpenModal(true);
+  };
+
+  const handleIconClickProject = () => {
+    setOpenModalProject(true);
   };
 
   const handleClick = (action) => {
@@ -77,12 +82,17 @@ export default function SpeedDialTooltipOpen({ onClick }) {
                 whiteSpace: 'nowrap',
               }}
               onClick={action.name === 'Criar reunião'
-              ? handleIconClick : null}
+                ? handleIconClick
+                : action.name === 'Criar projeto'
+              ?  handleIconClickProject : null}
             />
           ))}
         </SpeedDial>
         {openModal && (
           <ModalFormMeetingCreate handleClose={() => setOpenModal(false)} onSave={handleSave} />
+        )}
+        {openModalProject && (
+          <ModalFormProjectCreating handleClose={() => setOpenModal(false)} onSave={handleSave} />
         )}
       </div>
     </ThemeProvider>

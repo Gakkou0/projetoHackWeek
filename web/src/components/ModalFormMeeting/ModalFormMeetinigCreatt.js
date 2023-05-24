@@ -10,25 +10,40 @@ import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/pt-br';
 
-const UPDATE_MEETING_MUTATION = gql`
-  mutation UpdateMeetingMutation($id: Int!, $input: UpdateMeetingInput!) {
-    updateMeeting(id: $id, input: $input) {
+const CREATE_MEETING_MUTATION = gql`
+  mutation CreateMeetingMutation($input: CreateMeetingInput!) {
+    createMeeting(input: $input) {
       id
+      title
       datetime
+      advisorId
+      coadvisor
+      student
       observations
       location
+      studentAgreement
+      advisorAgreement
     }
   }
 `;
 
-const ModalFormMeetingEdit = ({
-  meeting,
+const ModalFormMeetingCreate = ({
   handleClose,
   onSave
 }) => {
   const [open, setOpen] = useState(true);
-  const [editedMeeting, setEditedMeeting] = useState(meeting);
-  const [updateMeeting] = useMutation(UPDATE_MEETING_MUTATION);
+  const [newMeeting, setNewMeeting] = useState({
+    title: '',
+    datetime: '',
+    advisorId: '',
+    coadvisorId: '',
+    studentId: '',
+    observations: '',
+    location: '',
+    studentAgreement: false,
+    advisorAgreement: false,
+  });
+  const [createMeeting] = useMutation(CREATE_MEETING_MUTATION);
 
   const handleCloses = () => {
     setOpen(false);
@@ -41,29 +56,37 @@ const ModalFormMeetingEdit = ({
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setEditedMeeting((prevMeeting) => ({
+    setNewMeeting((prevMeeting) => ({
       ...prevMeeting,
       [name]: value,
     }));
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await updateMeeting({
+      console.log(newMeeting)
+      const { data } = await createMeeting({
         variables: {
-          id: editedMeeting.id,
           input: {
-            title: editedMeeting.title,
-            datetime: editedMeeting.datetime,
-            observations: editedMeeting.observations,
-            location: editedMeeting.location,
+            title: newMeeting.title,
+            datetime: newMeeting.datetime,
+            observations: newMeeting.observations,
+            location: newMeeting.location,
+            advisor: newMeeting.advisor,
+            coadvisor: newMeeting.coadvisor,
+            studentId: newMeeting.studentId,
+            studentAgreement: newMeeting.studentAgreement,
+            advisorAgreement: newMeeting.advisorAgreement,
           },
         },
       });
-      onSave(data.updateMeeting);
+      onSave(data.createMeeting);
       handleCloses();
       window.location.reload();
     } catch (error) {
+      console.error(error);
+      console.log(newMeeting)
       // Handle the error appropriately
     }
   };
@@ -97,12 +120,12 @@ const ModalFormMeetingEdit = ({
                   padding: '20px',
                 }}
               >
-                <h2>Detalhes da Reunião</h2>
+                <h2>Criar Reunião</h2>
                 <form>
                   <TextField
                     name="title"
                     label="Título"
-                    value={editedMeeting.title}
+                    value={newMeeting.title}
                     onChange={handleInputChange}
                     required
                     sx={{
@@ -111,7 +134,7 @@ const ModalFormMeetingEdit = ({
                       textAlign: 'center',
                     }}
                   />
-                  <br></br>
+                  <br />
                   <LocalizationProvider
                     dateAdapter={AdapterDayjs}
                     adapterLocale='pt-br'
@@ -120,16 +143,14 @@ const ModalFormMeetingEdit = ({
                       name="datetime"
                       ampm={false}
                       autoFocus={true}
-                      label="Data e hora da reunião"
-                      defaultValue={dayjs(editedMeeting.datetime)}
-                      localeText={editedMeeting.datetime}
+                      label="Data e Hora da Reunião"
+                      value={newMeeting.datetime}
                       onChange={(newValue) => {
-                        setEditedMeeting((prevMeeting) => ({
+                        setNewMeeting((prevMeeting) => ({
                           ...prevMeeting,
                           datetime: newValue,
                         }));
-                      }
-                      }
+                      }}
                       required
                       view={['year', 'month', 'day', 'hours', 'minutes']}
                       sx={{
@@ -138,12 +159,12 @@ const ModalFormMeetingEdit = ({
                         textAlign: 'center',
                       }}
                     />
-                    <br></br>
+                    <br />
                   </LocalizationProvider>
                   <TextField
                     name="location"
                     label="Local"
-                    value={editedMeeting.location}
+                    value={newMeeting.location}
                     onChange={handleInputChange}
                     sx={{
                       width: '100%',
@@ -151,11 +172,11 @@ const ModalFormMeetingEdit = ({
                       textAlign: 'center',
                     }}
                   />
-                  <br></br>
+                  <br />
                   <TextField
                     name="observations"
                     label="Observações"
-                    value={editedMeeting.observations}
+                    value={newMeeting.observations}
                     onChange={handleInputChange}
                     sx={{
                       width: '100%',
@@ -163,15 +184,54 @@ const ModalFormMeetingEdit = ({
                       textAlign: 'center',
                     }}
                   />
-                  <br></br>
+                  <br />
+                  {/* Adicione os campos adicionais do CREATE_MEETING_MUTATION aqui */}
+                  <TextField
+                    name="advisorId"
+                    label="ID do Orientador"
+                    value={newMeeting.advisorId}
+                    onChange={handleInputChange}
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
+                  />
+                  <br />
+                  <TextField
+                    name="coadvisorId"
+                    label="ID do Coorientador"
+                    value={newMeeting.coadvisorId}
+                    onChange={handleInputChange}
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
+                  />
+                   <TextField
+                    name="studentId"
+                    label="ID do Aluno"
+                    value={newMeeting.studentId}
+                    onChange={handleInputChange}
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
+                  />
+                  {/* ... adicione os demais campos do CREATE_MEETING_MUTATION como TextField aqui */}
+                  <br />
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Button
                       variant="contained"
                       color="primary"
                       type="submit"
                       onClick={handleSubmit}
+                      onChange={handleSubmit}
+
                     >
-                      Atualizar
+                      Criar
                     </Button>
                     <Button
                       variant="contained"
@@ -192,4 +252,4 @@ const ModalFormMeetingEdit = ({
   );
 };
 
-export default ModalFormMeetingEdit;
+export default ModalFormMeetingCreate;

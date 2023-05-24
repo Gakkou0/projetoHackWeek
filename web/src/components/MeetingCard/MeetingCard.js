@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ModalFormMeetingData from '../ModalFormMeeting/ModalFormMeetingData';
 import ModalFormMeetingEdit from '../ModalFormMeeting/ModalFormMeetingEdit';
+import ModalFormMeetingCreat from '../ModalFormMeeting/ModalFormMeetinigCreatt';
 import { useQuery, gql } from '@redwoodjs/web';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -20,6 +21,7 @@ import Button from '@mui/material/Button';
 import { ThemeProvider } from '@emotion/react';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { useMutation } from '@redwoodjs/web';
+
 
 const MEETING_QUERY = gql`
   query FindMeetingById($id: Int!) {
@@ -145,6 +147,16 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
 
     }
   }, [id]);
+
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleOpenModalEdit = () => {
     setEditModalOpen(true);
@@ -316,13 +328,22 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
           </CardContent>
         </CardActionArea>
         <CardActions disableSpacing>
-          <IconButton aria-label="Editar" onClick={handleOpenModalEdit}>
-            <EditOutlinedIcon />
-          </IconButton>
-          <IconButton aria-label="Deletar" onClick={handleOpen}>
-            <DeleteOutlinedIcon />
-          </IconButton>
+          {showSkeleton ? (
+            <Skeleton animation="wave" variant="circular" height={40} width={40} />
+          ) : (
+            <IconButton aria-label="Editar" onClick={handleOpenModalEdit}>
+              <EditOutlinedIcon />
+            </IconButton>
+          )}
+          {showSkeleton ? (
+            <Skeleton animation="wave" variant="circular" height={40} width={40} />
+          ) : (
+            <IconButton aria-label="Deletar" onClick={handleOpen}>
+              <DeleteOutlinedIcon />
+            </IconButton>
+          )}
         </CardActions>
+
         <ConfirmationModal
           open={open}
           onClose={handleClose}
@@ -346,15 +367,23 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
                 }}>
                 Deseja deletar? <br></br>
                 {meetingData?.meeting?.title}
+
               </Typography>
-              <Box sx={{ mt: 2 }}>
-                <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
-                  Sim
-                </Button>
-                <Button onClick={handleClose} variant="contained" color="primary">
-                  Não
-                </Button>
-              </Box>
+              <div style={{
+                alignItems: 'center',
+                alignContent: 'center',
+                display: 'flex',
+                justifyContent: 'space-between'
+              }}>
+                <Box sx={{ mt: 2 }}>
+                  <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
+                    Sim
+                  </Button>
+                  <Button onClick={handleClose} variant="contained" color="primary">
+                    Não
+                  </Button>
+                </Box>
+              </div>
             </Box>
           </ThemeProvider>
         </ConfirmationModal>
@@ -363,11 +392,18 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
         )}
 
         {editModalOpen && (
-          <ModalFormMeetingEdit
-            meeting={meetingData?.meeting} // Certifique-se de passar o objeto meeting com a propriedade id
-            handleClose={handleClose}
-            onSave={handleSaveMeeting} // Passa a função handleSaveMeeting como onSave
+
+          <ModalFormMeetingCreat
+            meeting={meetingData?.meeting}
+            handleClose={handleCloseModalEdit}
+            onSave={handleSaveMeeting}
           />
+
+//          <ModalFormMeetingEdit
+//          meeting={meetingData?.meeting} // Certifique-se de passar o objeto meeting com a propriedade id
+//           handleClose={handleClose}
+//            onSave={handleSaveMeeting} // Passa a função handleSaveMeeting como onSave
+//         />
         )}
       </Card>
     </div>

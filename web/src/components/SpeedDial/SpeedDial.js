@@ -7,8 +7,10 @@ import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { ThemeProvider } from '@emotion/react';
 import { color } from 'framer-motion';
+import ModalFormMeetingCreate from '../ModalFormMeeting/ModalFormMeetinigCreatt';
+
 export const actions = [
-  { icon: <GroupOutlinedIcon />, name: 'Criar reunião' },
+  { icon: <GroupOutlinedIcon />, name: 'Criar reunião', component: <ModalFormMeetingCreate/> },
   { icon: <NoteAddOutlinedIcon />, name: 'Criar projeto' },
 ];
 

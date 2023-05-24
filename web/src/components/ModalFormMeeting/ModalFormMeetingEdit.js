@@ -1,43 +1,38 @@
 import { useState } from 'react';
-import { Modal, TextField, Select, MenuItem, Button } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Modal, TextField, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { ThemeProvider } from '@emotion/react';
-
-import { useMutation, gql } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import 'dayjs/locale/pt-br';
 
 const UPDATE_MEETING_MUTATION = gql`
-  mutation UpdateMeeting($id: ID!, $input: MeetingInput!) {
+  mutation UpdateMeetingMutation($id: Int!, $input: UpdateMeetingInput!) {
     updateMeeting(id: $id, input: $input) {
       id
-      title
       datetime
-      location
-      project
       observations
+      location
     }
   }
 `;
 
-const ModalFormMeetingEdit = ({ meeting, handleClose }) => {
+const ModalFormMeetingEdit = ({
+  meeting,
+  handleClose,
+  onSave
+}) => {
   const [open, setOpen] = useState(true);
-  const [editedMeeting, setEditedMeeting] = useState({
-    title: meeting.title,
-    datetime: meeting.datetime,
-    location: meeting.location,
-    project: meeting.project,
-    observations: meeting.observations,
-  });
-
-  const projects = [
-    { value: '1', label: 'Projeto 1' },
-    { value: '2', label: 'Projeto 2' },
-  ];
+  const [editedMeeting, setEditedMeeting] = useState(meeting);
+  const [updateMeeting] = useMutation(UPDATE_MEETING_MUTATION);
 
   const handleCloses = () => {
     setOpen(false);
+    window.location.reload();
   };
 
   const openModalFromFunction = () => {
@@ -51,23 +46,26 @@ const ModalFormMeetingEdit = ({ meeting, handleClose }) => {
       [name]: value,
     }));
   };
-
-  const [updateMeeting] = useMutation(UPDATE_MEETING_MUTATION);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      await updateMeeting({
+      console.log(editedMeeting);
+      const { data } = await updateMeeting({
         variables: {
-          id: meeting.id,
-          input: editedMeeting,
+          id: editedMeeting.id,
+          input: {
+            title: editedMeeting.title,
+            datetime: editedMeeting.datetime,
+            observations: editedMeeting.observations,
+            location: editedMeeting.location,
+          },
         },
       });
-
-      handleClose();
+      onSave(data.updateMeeting);
+      handleCloses();
+      window.location.reload();
     } catch (error) {
-      console.error('Erro ao atualizar o encontro:', error);
+      // Handle the error appropriately
     }
   };
 
@@ -77,7 +75,7 @@ const ModalFormMeetingEdit = ({ meeting, handleClose }) => {
         {open && (
           <Modal
             open={open}
-            onClose={handleClose}
+            onClose={handleCloses}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -101,61 +99,88 @@ const ModalFormMeetingEdit = ({ meeting, handleClose }) => {
                 }}
               >
                 <h2>Detalhes da Reunião</h2>
-                <form onSubmit={handleSubmit}>
+                <form>
                   <TextField
                     name="title"
                     label="Título"
                     value={editedMeeting.title}
                     onChange={handleInputChange}
                     required
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
                   />
-                  <br />
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TextField
+                  <br></br>
+                  <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                  >
+                    <DateTimePicker
                       name="datetime"
+                      ampm={false}
+                      autoFocus = {true}
                       label="Data e hora da reunião"
-                      value={
-                        editedMeeting.datetime
-                          ? new Date(editedMeeting.datetime).toLocaleString()
-                          : 'No Meeting Datetime'
+                      defaultValue={dayjs(editedMeeting.datetime)}
+                      localeText={editedMeeting.datetime}
+                      onChange={(newValue) => {
+                        setEditedMeeting((prevMeeting) => ({
+                          ...prevMeeting,
+                          datetime: newValue,
+                        }));
                       }
-                      onChange={handleInputChange}
+                      }
+                      required
+                      view={['year', 'month', 'day', 'hours', 'minutes']}
+                      sx={{
+                        width: '100%',
+                        marginBottom: '10px',
+                        textAlign: 'center',
+                      }}
                     />
-                    <br />
+                    <br></br>
                   </LocalizationProvider>
                   <TextField
                     name="location"
                     label="Local"
                     value={editedMeeting.location}
                     onChange={handleInputChange}
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
                   />
-                  <br />
-                  <Select
-                    name="project"
-                    label="Projeto"
-                    value={editedMeeting.project}
-                    onChange={handleInputChange}
-                  >
-                    {projects.map((project) => (
-                      <MenuItem key={project.value} value={project.value}>
-                        {project.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <br />
+                  <br></br>
                   <TextField
                     name="observations"
                     label="Observações"
                     value={editedMeeting.observations}
                     onChange={handleInputChange}
+                    sx={{
+                      width: '100%',
+                      marginBottom: '10px',
+                      textAlign: 'center',
+                    }}
                   />
-                  <br />
+                  <br></br>
                   <div>
-                    <Button type="submit" variant="contained" color="primary">
-                      Atualizar
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      onClick={handleSubmit}
+                    >
+                      Submit
                     </Button>
-                    <Button variant="contained" color="secondary" onClick={handleClose}>
-                      Fechar
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleCloses}
+                      style={{ marginLeft: '10px' }}
+                    >
+                      Close
                     </Button>
                   </div>
                 </form>

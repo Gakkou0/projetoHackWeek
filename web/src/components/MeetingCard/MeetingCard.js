@@ -81,6 +81,23 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
   const [cardData, setCardData] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const handleSaveMeeting = async (id, updatedMeeting) => {
+    try {
+      // Fazer a chamada GraphQL para atualizar a reunião
+      const response = await client.mutate({
+        mutation: UPDATE_MEETING_MUTATION,
+        variables: {
+          id: id,
+          input: updatedMeeting,
+        },
+      });
+
+      // Lógica adicional após a atualização da reunião
+    } catch (error) {
+      // Tratar erros de forma apropriada
+    }
+  };
+
 
 
   const { loading: meetingLoading, error: meetingError, data: meetingData } = useQuery(MEETING_QUERY, {
@@ -347,9 +364,9 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
 
         {editModalOpen && (
           <ModalFormMeetingEdit
-            meeting={meetingData?.meeting}
-            handleClose={handleCloseModalEdit}
-            handleEdit={handleEdit}
+            meeting={meetingData?.meeting} // Certifique-se de passar o objeto meeting com a propriedade id
+            handleClose={handleClose}
+            onSave={handleSaveMeeting} // Passa a função handleSaveMeeting como onSave
           />
         )}
       </Card>

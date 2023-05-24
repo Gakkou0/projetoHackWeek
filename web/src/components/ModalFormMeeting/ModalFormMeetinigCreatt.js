@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { Modal, TextField, Button, Select, MenuItem } from '@mui/material';
-import Box from '@mui/material/Box';
-import defaultTheme from '../DefaultTheme/DefaultTheme';
-import { ThemeProvider } from '@emotion/react';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import 'dayjs/locale/pt-br';
-import { FormControl } from '@mui/material';
-import { InputLabel } from '@mui/material';
+import React, { useState } from 'react'
+import { Modal, TextField, Button, Select, MenuItem } from '@mui/material'
+import Box from '@mui/material/Box'
+import defaultTheme from '../DefaultTheme/DefaultTheme'
+import { ThemeProvider } from '@emotion/react'
+import { gql, useMutation, useQuery } from '@apollo/client'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import dayjs from 'dayjs'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import Swal from 'sweetalert2'
+import 'dayjs/locale/pt-br'
+import { FormControl } from '@mui/material'
+import { InputLabel } from '@mui/material'
 
 const CREATE_MEETING_MUTATION = gql`
   mutation CreateMeetingMutation($input: CreateMeetingInput!) {
@@ -27,7 +28,7 @@ const CREATE_MEETING_MUTATION = gql`
       advisorAgreement
     }
   }
-`;
+`
 
 const USERS_QUERY = gql`
   query FindAllUser {
@@ -37,10 +38,10 @@ const USERS_QUERY = gql`
       userType
     }
   }
-`;
+`
 
 const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
   const [newMeeting, setNewMeeting] = useState({
     title: '',
     datetime: '',
@@ -51,79 +52,105 @@ const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
     location: '',
     studentAgreement: false,
     advisorAgreement: false,
-  });
-  const [createMeeting] = useMutation(CREATE_MEETING_MUTATION);
-  const { loading, error, data } = useQuery(USERS_QUERY);
-
-  console.log(data);
+  })
+  const [createMeeting] = useMutation(CREATE_MEETING_MUTATION)
+  const { loading, error, data } = useQuery(USERS_QUERY)
 
   const handleCloses = () => {
-    setOpen(false);
-    window.location.reload();
-  };
+    setOpen(false)
+  }
 
   const openModalFromFunction = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setNewMeeting((prevMeeting) => ({
       ...prevMeeting,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      console.log(newMeeting);
-      const { data } = await createMeeting({
-        variables: {
-          input: {
-            title: newMeeting.title,
-            datetime: newMeeting.datetime,
-            observations: newMeeting.observations,
-            location: newMeeting.location,
-            advisorId: newMeeting.advisorId,
-            coadvisorId: newMeeting.coadvisorId,
-            studentId: newMeeting.studentId,
-            studentAgreement: newMeeting.studentAgreement,
-            advisorAgreement: newMeeting.advisorAgreement,
+      if (Date.parse(newMeeting.datetime) < Date.now()) {
+        let timerInterval
+        handleCloses()
+        Swal.fire({
+          title: 'Erro!',
+          html: "A data informada já passou!",
+          timer: 2000,
+          background: '#171717',
+          color: 'aliceblue',
+          icon: 'error',
+          timerProgressBar: true,
+          didOpen: () => {},
+          willClose: () => {
+            window.location.reload()
           },
-        },
-      });
-      onSave(data.createMeeting);
-      handleCloses();
-      window.location.reload();
+        })}
+      else {
+        const { data } = await createMeeting({
+          variables: {
+            input: {
+              title: newMeeting.title,
+              datetime: newMeeting.datetime,
+              observations: newMeeting.observations,
+              location: newMeeting.location,
+              advisorId: newMeeting.advisorId,
+              coadvisorId: newMeeting.coadvisorId,
+              studentId: newMeeting.studentId,
+              studentAgreement: newMeeting.studentAgreement,
+              advisorAgreement: newMeeting.advisorAgreement,
+            },
+          },
+        })
+        onSave(data.createMeeting)
+        handleCloses()
+        window.location.reload()
+      }
     } catch (error) {
-      console.error(error);
-      console.log(newMeeting);
-      // Handle the error appropriately
-    }
-  };
+      console.error(error)
 
-  const students = [];
-  const advisors = [];
+      Swal.fire({
+        title: 'Erro!',
+        html: "Data precisa ser futura.",
+        timer: 2000,
+        background: '#171717',
+        color: 'aliceblue',
+        icon: 'error',
+        timerProgressBar: true,
+        didOpen: () => {},
+        willClose: () => {
+          clearInterval(timerInterval)
+        },
+      })
+    }
+  }
+
+  const students = []
+  const advisors = []
 
   if (data && data.users) {
     data.users.forEach((user) => {
       const student = {
         value: user.id,
         label: user.name,
-      };
+      }
 
       const advisor = {
         value: user.id,
         label: user.name,
-      };
+      }
 
       if (user.userType === 0) {
-        students.push(student);
+        students.push(student)
       } else if (user.userType === 1) {
-        advisors.push(advisor);
+        advisors.push(advisor)
       }
-    });
+    })
   }
 
   return (
@@ -180,11 +207,19 @@ const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
                       autoFocus={true}
                       label="Data e Hora da Reunião"
                       value={newMeeting.datetime}
+                      validation={{
+                        required: true,
+                        validate: (value) => {
+                          if (value) {
+                            console.log(value)
+                          }
+                        },
+                      }}
                       onChange={(newValue) => {
                         setNewMeeting((prevMeeting) => ({
                           ...prevMeeting,
                           datetime: newValue,
-                        }));
+                        }))
                       }}
                       required
                       view={['year', 'month', 'day', 'hours', 'minutes']}
@@ -221,79 +256,87 @@ const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
                   />
                   <br />
                   <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Orientador</InputLabel>
-                  <Select
-                    labelId='demo-simple-select-autowidth-label'
-                    id='demo-simple-select-autowidth'
-                    name="advisorId"
-                    label="Orientador"
-                    validation={{
-                      required: true,
-                    }}
-                    value={newMeeting.advisorId}
-                    onChange={handleInputChange}
-                    fullWidth
-                    required
-                    style={{
-                      marginBottom: '10px',
-                      color: '#fff',
-                    }}
-                  >
-                    {advisors.map((advisor) => (
-                      <MenuItem key={advisor.value} value={advisor.value}>
-                        {advisor.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <InputLabel id="demo-simple-select-label">
+                      Orientador
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-autowidth-label"
+                      id="demo-simple-select-autowidth"
+                      name="advisorId"
+                      label="Orientador"
+                      validation={{
+                        required: true,
+                      }}
+                      value={newMeeting.advisorId}
+                      onChange={handleInputChange}
+                      fullWidth
+                      required
+                      style={{
+                        marginBottom: '10px',
+                        color: '#fff',
+                      }}
+                    >
+                      {advisors.map((advisor) => (
+                        <MenuItem key={advisor.value} value={advisor.value}>
+                          {advisor.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                   <br />
                   <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Co-Orientador</InputLabel>
-                  <Select
-                    name="coadvisorId"
-                    label="Co orientador"
-                    value={newMeeting.coadvisorId}
-                    onChange={handleInputChange}
-                    fullWidth
-                    color='primary'
-                    required
-                    style={{
-                      marginBottom: '10px',
-                      color: '#fff',
-                    }}
-                  >
-                    {advisors.map((advisor) => (
-                      <MenuItem key={advisor.value} value={advisor.value}>
-                        {advisor.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <InputLabel id="demo-simple-select-label">
+                      Co-Orientador
+                    </InputLabel>
+                    <Select
+                      name="coadvisorId"
+                      label="Co orientador"
+                      value={newMeeting.coadvisorId}
+                      onChange={handleInputChange}
+                      fullWidth
+                      color="primary"
+                      required
+                      style={{
+                        marginBottom: '10px',
+                        color: '#fff',
+                      }}
+                    >
+                      {advisors.map((advisor) => (
+                        <MenuItem key={advisor.value} value={advisor.value}>
+                          {advisor.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                   <br />
                   <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Estudante</InputLabel>
-                  <Select
-                    name="studentId"
-                    label="Estudante"
-                    value={newMeeting.studentId}
-                    onChange={handleInputChange}
-                    fullWidth
-                    required
-                    style={{
-                      marginBottom: '10px',
-                      color: '#fff',
-                    }}
-                  >
-                    {students.map((student) => (
-                      <MenuItem key={student.value} value={student.value}>
-                        {student.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <InputLabel id="demo-simple-select-label">
+                      Estudante
+                    </InputLabel>
+                    <Select
+                      name="studentId"
+                      label="Estudante"
+                      value={newMeeting.studentId}
+                      onChange={handleInputChange}
+                      fullWidth
+                      required
+                      style={{
+                        marginBottom: '10px',
+                        color: '#fff',
+                      }}
+                    >
+                      {students.map((student) => (
+                        <MenuItem key={student.value} value={student.value}>
+                          {student.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                   {/* ... adicione os demais campos do CREATE_MEETING_MUTATION como TextField aqui */}
                   <br />
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
                     <Button
                       variant="contained"
                       color="primary"
@@ -318,7 +361,7 @@ const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
         )}
       </ThemeProvider>
     </div>
-  );
-};
+  )
+}
 
-export default ModalFormMeetingCreate;
+export default ModalFormMeetingCreate

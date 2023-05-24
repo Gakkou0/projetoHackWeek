@@ -4,6 +4,7 @@ import SpeedDial from 'src/components/SpeedDial'
 import LoadingProgress from 'src/components/LoadingProgress';
 import AnimatedPage from 'src/components/LoadingProgress/AnimatedPage';
 import MeetingCardList from 'src/components/MeetingListDate/MeetingListDateAfter';
+import '../../index.css'
 
 const DashboardPage = () => {
   return (

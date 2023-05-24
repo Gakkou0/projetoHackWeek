@@ -1,6 +1,4 @@
 .card {
-  display: flex;
-  flex-direction: column;
   background-color: #D9D9D9;
   height: 35vh;
   width: 45vh;

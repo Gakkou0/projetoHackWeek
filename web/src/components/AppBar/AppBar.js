@@ -17,7 +17,7 @@ import Button from '@mui/material/Button';
 import { Link, routes } from '@redwoodjs/router';
 
 const drawerWidth = 240;
-const navItems = ['Dashboard', 'Conta', 'Histórico', 'Sair'];
+const navItems = ['Dashboard', 'Conta', 'Histórico', 'Projetos', 'Sair'];
 
 const getRouteForItem = (item) => {
   // Aqui você pode mapear cada item do menu para a rota correspondente no seu aplicativo
@@ -28,6 +28,8 @@ const getRouteForItem = (item) => {
       return routes.dashboard();
     case 'Histórico':
       return routes.historic();
+    case 'Projetos':
+      return routes.project();
     case 'Sair':
       return routes.home();
     default:

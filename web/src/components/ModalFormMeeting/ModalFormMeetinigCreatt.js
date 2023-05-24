@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { Modal, TextField, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Modal, TextField, Button, Select, MenuItem } from '@mui/material';
 import Box from '@mui/material/Box';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { ThemeProvider } from '@emotion/react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/pt-br';
+import { FormControl } from '@mui/material';
+import { InputLabel } from '@mui/material';
 
 const CREATE_MEETING_MUTATION = gql`
   mutation CreateMeetingMutation($input: CreateMeetingInput!) {
@@ -17,8 +19,8 @@ const CREATE_MEETING_MUTATION = gql`
       title
       datetime
       advisorId
-      coadvisor
-      student
+      # coadvisor
+      # student
       observations
       location
       studentAgreement
@@ -27,10 +29,17 @@ const CREATE_MEETING_MUTATION = gql`
   }
 `;
 
-const ModalFormMeetingCreate = ({
-  handleClose,
-  onSave
-}) => {
+const USERS_QUERY = gql`
+  query FindAllUser {
+    users {
+      id
+      name
+      userType
+    }
+  }
+`;
+
+const ModalFormMeetingCreate = ({ handleClose, onSave }) => {
   const [open, setOpen] = useState(true);
   const [newMeeting, setNewMeeting] = useState({
     title: '',
@@ -44,6 +53,9 @@ const ModalFormMeetingCreate = ({
     advisorAgreement: false,
   });
   const [createMeeting] = useMutation(CREATE_MEETING_MUTATION);
+  const { loading, error, data } = useQuery(USERS_QUERY);
+
+  console.log(data);
 
   const handleCloses = () => {
     setOpen(false);
@@ -65,7 +77,7 @@ const ModalFormMeetingCreate = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(newMeeting)
+      console.log(newMeeting);
       const { data } = await createMeeting({
         variables: {
           input: {
@@ -73,8 +85,8 @@ const ModalFormMeetingCreate = ({
             datetime: newMeeting.datetime,
             observations: newMeeting.observations,
             location: newMeeting.location,
-            advisor: newMeeting.advisor,
-            coadvisor: newMeeting.coadvisor,
+            advisorId: newMeeting.advisorId,
+            coadvisorId: newMeeting.coadvisorId,
             studentId: newMeeting.studentId,
             studentAgreement: newMeeting.studentAgreement,
             advisorAgreement: newMeeting.advisorAgreement,
@@ -86,10 +98,33 @@ const ModalFormMeetingCreate = ({
       window.location.reload();
     } catch (error) {
       console.error(error);
-      console.log(newMeeting)
+      console.log(newMeeting);
       // Handle the error appropriately
     }
   };
+
+  const students = [];
+  const advisors = [];
+
+  if (data && data.users) {
+    data.users.forEach((user) => {
+      const student = {
+        value: user.id,
+        label: user.name,
+      };
+
+      const advisor = {
+        value: user.id,
+        label: user.name,
+      };
+
+      if (user.userType === 0) {
+        students.push(student);
+      } else if (user.userType === 1) {
+        advisors.push(advisor);
+      }
+    });
+  }
 
   return (
     <div>
@@ -137,7 +172,7 @@ const ModalFormMeetingCreate = ({
                   <br />
                   <LocalizationProvider
                     dateAdapter={AdapterDayjs}
-                    adapterLocale='pt-br'
+                    adapterLocale="pt-br"
                   >
                     <DateTimePicker
                       name="datetime"
@@ -185,41 +220,77 @@ const ModalFormMeetingCreate = ({
                     }}
                   />
                   <br />
-                  {/* Adicione os campos adicionais do CREATE_MEETING_MUTATION aqui */}
-                  <TextField
+                  <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Orientador</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-autowidth-label'
+                    id='demo-simple-select-autowidth'
                     name="advisorId"
-                    label="ID do Orientador"
+                    label="Orientador"
+                    validation={{
+                      required: true,
+                    }}
                     value={newMeeting.advisorId}
                     onChange={handleInputChange}
-                    sx={{
-                      width: '100%',
+                    fullWidth
+                    required
+                    style={{
                       marginBottom: '10px',
-                      textAlign: 'center',
+                      color: '#fff',
                     }}
-                  />
+                  >
+                    {advisors.map((advisor) => (
+                      <MenuItem key={advisor.value} value={advisor.value}>
+                        {advisor.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  </FormControl>
                   <br />
-                  <TextField
+                  <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Co-Orientador</InputLabel>
+                  <Select
                     name="coadvisorId"
-                    label="ID do Coorientador"
+                    label="Co orientador"
                     value={newMeeting.coadvisorId}
                     onChange={handleInputChange}
-                    sx={{
-                      width: '100%',
+                    fullWidth
+                    color='primary'
+                    required
+                    style={{
                       marginBottom: '10px',
-                      textAlign: 'center',
+                      color: '#fff',
                     }}
-                  />
-                   <TextField
+                  >
+                    {advisors.map((advisor) => (
+                      <MenuItem key={advisor.value} value={advisor.value}>
+                        {advisor.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  </FormControl>
+                  <br />
+                  <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Estudante</InputLabel>
+                  <Select
                     name="studentId"
-                    label="ID do Aluno"
+                    label="Estudante"
                     value={newMeeting.studentId}
                     onChange={handleInputChange}
-                    sx={{
-                      width: '100%',
+                    fullWidth
+                    required
+                    style={{
                       marginBottom: '10px',
-                      textAlign: 'center',
+                      color: '#fff',
                     }}
-                  />
+                  >
+                    {students.map((student) => (
+                      <MenuItem key={student.value} value={student.value}>
+                        {student.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  </FormControl>
                   {/* ... adicione os demais campos do CREATE_MEETING_MUTATION como TextField aqui */}
                   <br />
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -228,8 +299,6 @@ const ModalFormMeetingCreate = ({
                       color="primary"
                       type="submit"
                       onClick={handleSubmit}
-                      onChange={handleSubmit}
-
                     >
                       Criar
                     </Button>

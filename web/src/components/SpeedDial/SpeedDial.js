@@ -4,14 +4,12 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { ThemeProvider } from '@emotion/react';
-import { color } from 'framer-motion';
-import ModalFormMeetingCreat from '../ModalFormMeeting/ModalFormMeetinigCreatt';
-
+import ModalFormMeetingCreate from 'src/components/ModalFormMeeting/ModalFormMeetinigCreatt';
+import defaultTheme from '../DefaultTheme/DefaultTheme';
 
 export const actions = [
-  { icon: <GroupOutlinedIcon />, name: 'Criar reunião'},
+  { icon: <GroupOutlinedIcon />, name: 'Criar reunião' },
   { icon: <NoteAddOutlinedIcon />, name: 'Criar projeto' },
 ];
 
@@ -19,14 +17,21 @@ export default function SpeedDialTooltipOpen({ onClick }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openModal, setOpenModal] = React.useState(false);
 
+  const handleIconClick = () => {
+    setOpenModal(true);
+  };
 
   const handleClick = (action) => {
     onClick(action.name);
     handleOpen();
   };
 
-
+  const handleSave = (data) => {
+    // Handle the saved data from the modal
+    console.log('Saved Data:', data);
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -38,7 +43,7 @@ export default function SpeedDialTooltipOpen({ onClick }) {
           height: 'calc(50vh - 32px)',
           width: 'calc(30vw - 32px)',
           transform: 'translateZ(0px)',
-          flexGrow: 1
+          flexGrow: 1,
         }}
       >
         <SpeedDial
@@ -57,23 +62,27 @@ export default function SpeedDialTooltipOpen({ onClick }) {
               bgcolor: 'primary.main',
               '&:hover': {
                 bgcolor: 'secondary.main',
-              }
-            }
+              },
+            },
           }}
         >
           {actions.map((action) => (
             <SpeedDialAction
               key={action.name}
               icon={action.icon}
-              onClick={() => handleClick(action)}
               tooltipTitle={action.name}
               tooltipOpen
               sx={{
                 whiteSpace: 'nowrap',
               }}
+              onClick={action.name === 'Criar reunião'
+              ? handleIconClick : null}
             />
           ))}
         </SpeedDial>
+        {openModal && (
+          <ModalFormMeetingCreate handleClose={() => setOpenModal(false)} onSave={handleSave} />
+        )}
       </div>
     </ThemeProvider>
   );

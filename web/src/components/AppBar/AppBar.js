@@ -29,7 +29,7 @@ const getRouteForItem = (item) => {
     case 'Histórico':
       return routes.historic();
     case 'Sair':
-      return routes.dashboard();
+      return routes.home();
     default:
       return '/';
   }

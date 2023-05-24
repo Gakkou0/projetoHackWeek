@@ -312,15 +312,15 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
                 </>
               ) : (
                 <>
-                  Orientador: {advisor || 'No advisor available'}
+                  Orientador: {advisor || 'Sem Orientador'}
                   <br />
-                  Co-Orientador: {coadvisor || 'No coadvisor available'}
+                  Co-Orientador: {coadvisor || 'Sem Co-Orientador'}
                   <br />
-                  Estudante: {student || 'No student available'}
+                  Estudante: {student || 'Sem Estudante'}
                   <br />
-                  Local: {meetingData?.meeting?.location || 'No location available'}
+                  Local: {meetingData?.meeting?.location || 'Sem Local definido'}
                   <br />
-                  Observação: {meetingData?.meeting?.observations || 'No observations available'}
+                  Observação: {meetingData?.meeting?.observations || 'Sem Observação'}
                   <br />
                 </>
               )}
@@ -372,10 +372,20 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
               <div style={{
                 alignItems: 'center',
                 alignContent: 'center',
+                alignSelf: 'center',
+                alignText: 'center',
                 display: 'flex',
                 justifyContent: 'space-between'
               }}>
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 2,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  alignSelf: 'center',
+                  alignText: 'center',
+                }}>
                   <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
                     Sim
                   </Button>

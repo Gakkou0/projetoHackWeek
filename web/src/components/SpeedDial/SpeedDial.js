@@ -7,10 +7,11 @@ import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
 import { ThemeProvider } from '@emotion/react';
 import { color } from 'framer-motion';
-import ModalFormMeetingCreate from '../ModalFormMeeting/ModalFormMeetinigCreatt';
+import ModalFormMeetingCreat from '../ModalFormMeeting/ModalFormMeetinigCreatt';
+
 
 export const actions = [
-  { icon: <GroupOutlinedIcon />, name: 'Criar reunião', component: <ModalFormMeetingCreate/> },
+  { icon: <GroupOutlinedIcon />, name: 'Criar reunião'},
   { icon: <NoteAddOutlinedIcon />, name: 'Criar projeto' },
 ];
 
@@ -24,6 +25,8 @@ export default function SpeedDialTooltipOpen({ onClick }) {
     onClick(action.name);
     handleOpen();
   };
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

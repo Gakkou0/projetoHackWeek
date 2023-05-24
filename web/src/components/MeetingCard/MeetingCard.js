@@ -393,17 +393,12 @@ const RecipeReviewCard = ({ cosupervisor, viewer, id }) => {
 
         {editModalOpen && (
 
-          <ModalFormMeetingCreat
-            meeting={meetingData?.meeting}
-            handleClose={handleCloseModalEdit}
-            onSave={handleSaveMeeting}
-          />
 
-//          <ModalFormMeetingEdit
-//          meeting={meetingData?.meeting} // Certifique-se de passar o objeto meeting com a propriedade id
-//           handleClose={handleClose}
-//            onSave={handleSaveMeeting} // Passa a função handleSaveMeeting como onSave
-//         />
+         <ModalFormMeetingEdit
+          meeting={meetingData?.meeting} // Certifique-se de passar o objeto meeting com a propriedade id
+          handleClose={handleClose}
+          onSave={handleSaveMeeting} // Passa a função handleSaveMeeting como onSave
+        />
         )}
       </Card>
     </div>
